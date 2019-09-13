@@ -2,15 +2,19 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import {SearchBar, VideoDetail} from './components';
+import {SearchBar, VideoDetail, VideoList} from './components';
 
 import youtube from './api/youtube';
 
 class App extends React.Component {
 
   state = {
-    video: [],
+    videos: [],
     selectedVideo: null,
+  }
+
+  componentDidMount() {
+    this.handleSubmit('adorable dog videos');
   }
 
   handleSubmit = async (searchTerm) => {
@@ -26,8 +30,12 @@ class App extends React.Component {
     this.setState({ videos: response.data.items, selectedVideo: response.data.items[0] });
   }
 
+  onVideoSelect = (video) => {
+    this.setState({ selectedVideo: video})
+  }
+
   render() {
-    const { selectedVideo } = this.state;
+    const { selectedVideo, videos } = this.state;
 
     return(
       <Grid justify="center" container spacing={10}>
@@ -42,7 +50,7 @@ class App extends React.Component {
               </Grid>
 
               <Grid item xs={4}>
-                {/* {SEARCHBAR} */}
+                <VideoList videos={videos} onVideoSelect={this.onVideoSelect}/>
               </Grid>
             </Grid>
           </Grid>
